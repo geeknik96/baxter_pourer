@@ -1,10 +1,11 @@
 import cv2
-import cv2_bridge
+
 
 from sensor_msgs.msg import Image
 
 class Camera:
     def __init__(self, camera):
+        return
         self.frame = None
         cam_pub = "/cameras/{0}/image" % camera
 

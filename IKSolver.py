@@ -28,10 +28,10 @@ class IKsolver:
         self.qtarget = [
             # Human-like mapping (front of camera  = front of the wrist)
             Quaternion(
-                x=0,
+                x=0.9,
                 y=0.7071067811865475244,  # sqrt(0.5)
                 z=0,
-                w=0.7071067811865475244  # sqrt(0.5)
+                w=0 # sqrt(0.5)
                 # Camera is pointing down
             ), Quaternion(
                 x=0,
