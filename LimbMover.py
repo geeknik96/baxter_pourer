@@ -31,17 +31,17 @@ class LimbMover:
             ik_response = ik_service(ik_request)
         except (rospy.ServiceException, rospy.ROSException), error_message:
             rospy.logerr("Service request failed: %r" % (error_message,))
-            sys.exit("ERROR - baxter_ik_move - Failed to append pose")
+            return False
         if (ik_response.isValid[0]):
-            print("PASS: Valid joint configuration found")
             limb_joints = dict(zip(ik_response.joints[0].name, ik_response.joints[0].position))
             if move:
                 self.limb_interface.move_to_joint_positions(limb_joints)
             else:
                 self.limb_interface.set_joint_positions(limb_joints)
+            return True
 
         else:
-            sys.exit("ERROR - baxter_ik_move - No valid joint configuration found")
+            return False
 
         self.pose = self._get_current_pose()
         if print_debug:

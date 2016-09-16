@@ -2,11 +2,9 @@ import rospy
 import LimbMover
 import Camera
 import random
+import LimbRuler
+import ObjDetector
 import time
-
-def move_arms_to_work_pose(llimb, rlimb):
-    llimb.move((0.7, 0.0, 0.08))
-    rlimb.move((0.5, 0.2, 0.3))
 
 
 def main():
@@ -15,8 +13,10 @@ def main():
     left_limb = LimbMover.LimbMover('left')
     # right_limb = LimbMover.LimbMover('right')
 
-    left_camera = Camera.Camera('left')
-    left_camera.start()
+    # left_camera = Camera.Camera('left')
+    # left_camera.start()
+    # limb_ruler = LimbRuler.LimbRuler('left')
+    # detector = ObjDetector.ObjDetector()
     # right_camera = Camera.Camera('right')
 
     left_limb.limb_interface.set_joint_position_speed(1.0)
@@ -27,10 +27,7 @@ def main():
         while y < 0.6:
             w = random.random() * 3.14
             print x, y, w
-            left_limb.move([x, y, 0.15, -3.14, 0, w])
-            img = left_camera.cv_image
-            Camera.cv2.imshow('vision', img)
-            Camera.cv2.waitKey(2000)
+            left_limb.move([x, y, 0.15, -3.14, -3.14/2, 0], move=True)
             # right_limb.move([x, y - 0.3, 0.15, -3.14, 0, w])
             y += 0.05
         x += 0.1

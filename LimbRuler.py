@@ -1,12 +1,15 @@
-import baxter_interface
+from baxter_interface import AnalogIO
+import sys
+
 
 class LimbRuler:
     def __init__(self, limb):
         self.limb = limb
-        self.ruler = baxter_interface.analog_io.AnalogIO('{0}_hand_range' % limb)
+        self.analog_io = '{0}_hand_range'.format(limb)
+        self.ruler = AnalogIO(self.analog_io)
 
     def distance(self):
-        dist = ruler.state()
-        if dist > 65000:
-            sys.exit("ERROR - get_distance - no distance found")
-        return float(dist / 1000) # in mm
+        dist = self.ruler.state()
+        # if dist > 65000:
+        #     sys.exit("ERROR - get_distance - no distance found")
+        return float(dist / 1000)  # in mm

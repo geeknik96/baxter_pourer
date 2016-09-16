@@ -6,7 +6,7 @@ from cv_bridge import (CvBridge, CvBridgeError)
 
 from sensor_msgs.msg import Image
 import std_srvs.srv
-from baxter_interface import CameraControllerk
+from baxter_interface import CameraController
 
 import numpy
 
