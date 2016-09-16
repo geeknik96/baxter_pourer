@@ -17,7 +17,7 @@ class LimbMover:
         self.limb_interface = baxter_interface.Limb(limb)
         self.pose = self._get_current_pose()
 
-    def move(self, rpy_pose, print_debug=False):
+    def move(self, rpy_pose, print_debug=False, move=False):
         quaternion_pose = conversions.list_to_pose_stamped(rpy_pose, "base")
 
         node = "ExternalTools/" + self.limb + "/PositionKinematicsNode/IKService"
@@ -35,7 +35,11 @@ class LimbMover:
         if (ik_response.isValid[0]):
             print("PASS: Valid joint configuration found")
             limb_joints = dict(zip(ik_response.joints[0].name, ik_response.joints[0].position))
-            self.limb_interface.move_to_joint_positions(limb_joints)
+            if move:
+                self.limb_interface.move_to_joint_positions(limb_joints)
+            else:
+                self.limb_interface.set_joint_positions(limb_joints)
+
         else:
             sys.exit("ERROR - baxter_ik_move - No valid joint configuration found")
 
