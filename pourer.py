@@ -3,7 +3,7 @@ import LimbMover
 import Camera
 import random
 import LimbRuler
-import ObjDetector
+import TemplateMatcher
 import time
 
 
