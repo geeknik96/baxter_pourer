@@ -14,9 +14,9 @@ import numpy
 class Camera:
     CAM_X_OFFSET = 0.045
     CAM_Y_OFFSET = -0.01
-    CAM_CALIB = 0.0025  # in mm
+    CAM_CALIB = 0.0025  # in m
 
-    def __init__(self, camera_name, resolution=(1280, 800)):
+    def __init__(self, camera_name, resolution=(960, 600)):
         # self._reset_cameras()
         self.resolution = resolution
         self.cv_image = numpy.zeros((resolution[1], resolution[0], 3), numpy.uint8)

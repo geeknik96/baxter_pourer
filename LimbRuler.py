@@ -7,9 +7,11 @@ class LimbRuler:
         self.limb = limb
         self.analog_io = '{0}_hand_range'.format(limb)
         self.ruler = AnalogIO(self.analog_io)
+        self.value = None
 
     def distance(self):
         dist = self.ruler.state()
-        # if dist > 65000:
-        #     sys.exit("ERROR - get_distance - no distance found")
-        return float(dist / 1000)  # in mm
+        if dist > 65000 and not self.value:
+            return 0.2
+        self.value = float(dist / 1000)
+        return self.value

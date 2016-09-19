@@ -14,6 +14,9 @@ def mouse_callback(event, x, y, flags, param):
     global lookAt
     if event == cv2.EVENT_LBUTTONDOWN:
         lookAt = (x, y)
+        print x ,y
+    if event ==cv2.EVENT_RBUTTONDOWN:
+        print x, y
 
 
 
@@ -22,22 +25,31 @@ def to_baxter_coords(px, width, height, cam_calib, dist, cam_x_offset, cam_y_off
         + pose[0] + cam_x_offset
     y = ((px[0] - (width / 2)) * cam_calib * dist) \
         + pose[1] + cam_y_offset
+
     return x, y
 
 
-def draw_aim(image, camera):
-    p1 = (camera.resolution[0] / 2, 0)
-    p2 = (camera.resolution[0] / 2, camera.resolution[1])
-    cv2.line(image, p1, p2, (255, 255, 255))
-    cv2.line(image, (0, camera.resolution[1] / 2), (camera.resolution[0], camera.resolution[1] / 2), (255, 255, 255))
+aim_x = 546.0 / 960.0
+aim_y = 244.0 / 600.0
 
+
+def draw_aim(image, camera):
+    global aim_x, aim_y
+    x = int(aim_x * camera.resolution[0])
+    y = int(aim_y * camera.resolution[1])
+    p1 = (x, 0)
+    p2 = (x, camera.resolution[1])
+    p3 = (0, y)
+    p4 = (camera.resolution[0], y)
+    cv2.line(image, p1, p2, (255, 255, 255))
+    cv2.line(image, p3, p4, (255, 255, 255))
 
 def main():
     global lookAt
     rospy.init_node('lookAt')
-    camera = Camera('right')
-    limb = LimbMover('right')
-    ruler = LimbRuler('right')
+    camera = Camera('left')
+    limb = LimbMover('left')
+    ruler = LimbRuler('left')
 
     cv2.namedWindow('lookAt')
     cv2.setMouseCallback('lookAt', mouse_callback)
@@ -54,7 +66,7 @@ def main():
         if lookAt is not None:
             dist = ruler.distance()
             if dist > 65:
-                dist = 0.35
+                dist = 0.218
             x, y = to_baxter_coords(lookAt, camera.resolution[0],
                                     camera.resolution[1],
                                     camera.CAM_CALIB, dist,
@@ -71,6 +83,12 @@ def main():
         key = cv2.waitKey(50) & 0xFF
         if key == 27:
             break
+        elif key == ord('['):
+            cz -= 0.05
+            limb.move([cx, cy, cz, -3.1415, 0, 0], move=True)
+        elif key == ord(']'):
+            cz += 0.05
+            limb.move([cx, cy, cz, -3.1415, 0, 0], move=True)
         elif key == ord('s'):
             z = cz + 0.4
             while z > cz and not limb.move([cx, cy, cz + 0.4, -3.1415, 0, 0], move=True):
